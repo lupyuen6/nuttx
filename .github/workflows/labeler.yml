@@ -59,16 +59,26 @@ jobs:
             // TODO: Parse the Arch Label Patterns in .github/labeler.yml
             const label = "Arch: sparc";
             const pattern = "arch/sparc/.*";
-            const re = new RegExp(pattern);
-            re.test("arch/sparc/aaa.txt");  // Returns true
-            re.test("arch/spar/aaa.txt");   // Returns false
+            const archLabels = [ { label, pattern } ];
 
             // TODO: Find the matching Arch Labels
-            for (const file of listFilesResponse) {
-              console.log({ file });
-              const match = re.test(file.filename);
-              console.log({ match });
+            var prLabels = [];
+            for (const archLabel of archLabels) {
+              console.log({ archLabel });
+
+              for (const file of listFilesResponse) {
+                console.log({ file });
+                const re = new RegExp(archLabel.pattern);
+                const match = re.test(file.filename);
+                console.log({ match });
+                if (match) {
+                  // TODO: Deduplicate labels
+                  prLabels.push(archLabel.label);
+                  break;
+                }
+              }
             }
+            console.log({ prLabels });
 
       # TODO: Save the PR Number and PR Labels into a PR Artifact
       - name: Save PR number and labels
