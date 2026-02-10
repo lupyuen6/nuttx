@@ -65,6 +65,16 @@ jobs:
           script: |
             var fs = require('fs');
             var issue_number = Number(fs.readFileSync('./NR'));
+            await github.rest.issues.setLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              labels: [
+                'Size: Unknown'
+              ],
+            });
+
+            # TODO: Remove this PR Comment
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
