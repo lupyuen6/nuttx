@@ -32,7 +32,7 @@ jobs:
     steps:
       # Download the PR Artifact, containing PR Number and PR Labels
       - name: 'Download artifact'
-        uses: actions/github-script@v3.1.0
+        uses: actions/github-script@v8
         with:
           script: |
             var artifacts = await github.actions.listWorkflowRunArtifacts({
@@ -55,7 +55,7 @@ jobs:
 
       # TODO: Write the PR Labels into the PR
       - name: 'Comment on PR'
-        uses: actions/github-script@v3
+        uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
