@@ -12,34 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# This workflow will fetch the updated PR lines, compute the Size Label
+# and Arch Labels, then save the PR Labels into a PR Artifact. The
+# PR Labels will be written to the PR in the "workflow_run" trigger
+# (pr_labeler.yml), because this "pull_request" trigger has read-only
+# permission. Don't use "pull_request_target", it's unsafe.
 name: "Pull Request Labeler"
 on:
-  - pull_request_target
+  - pull_request
 
 jobs:
   labeler:
-    permissions:
-      contents: read
-      pull-requests: write
-      issues: write
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
+      # TODO: Fetch the updated PR lines via GitHub API. We don't need the entire repo.
 
-      - name: Assign labels based on paths
-        uses: actions/labeler@main
-        with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          sync-labels: true
+      # TODO: Compute the Size Label and Arch Labels
 
-      - name: Assign labels based on the PR's size
-        uses: codelytv/pr-size-labeler@v1.10.3
+      # TODO: Save the PR Number and PR Labels into a PR Artifact
+      - name: Save PR number and labels
+        run: |
+          mkdir -p ./pr
+          echo ${{ github.event.number }} > ./pr/NR
+      - uses: actions/upload-artifact@v2
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ignore_file_deletions: true
-          xs_label: 'Size: XS'
-          s_label: 'Size: S'
-          m_label: 'Size: M'
-          l_label: 'Size: L'
-          xl_label: 'Size: XL'
+          name: pr
+          path: pr/
