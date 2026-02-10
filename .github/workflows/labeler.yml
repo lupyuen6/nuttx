@@ -29,8 +29,8 @@ jobs:
       issues: read
     runs-on: ubuntu-latest
     steps:
-      # Fetch the updated PR lines
-      - name: Fetch PR updates
+      # Fetch the updated PR lines. Compute the Size Label and Arch Labels.
+      - name: Compute PR labels
         uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -49,9 +49,9 @@ jobs:
             const listFilesResponse = await github.paginate(listFilesOptions);
             console.log({ listFilesResponse });
 
-            # TODO: Compute the Size Label
-            
-            # Compute the Arch Labels
+            // TODO: Compute the Size Label
+
+            // Compute the Arch Labels
             const label = "Arch: sparc";
             const pattern = "arch/sparc/.*";
             const re = new RegExp(pattern);
@@ -63,7 +63,10 @@ jobs:
         run: |
           mkdir -p ./pr
           echo ${{ github.event.number }} > ./pr/pr-id.txt
-      - uses: actions/upload-artifact@v6
+
+      # Upload the PR Artifact as pr.zip
+      - name: Upload PR artifact
+        uses: actions/upload-artifact@v6
         with:
           name: pr
           path: pr/
