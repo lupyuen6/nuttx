@@ -58,12 +58,12 @@ jobs:
 
             // TODO: Parse the Arch Label Patterns in .github/labeler.yml
             const archLabels = [
-              { label: "Arch: arm", pattern: "arch/arm/.*" }
-              { label: "Arch: arm64", pattern: "arch/arm64/.*" }
+              { label: "Arch: arm", pattern: "arch/arm/.*" },
+              { label: "Arch: arm64", pattern: "arch/arm64/.*" },
               { label: "Arch: avr", pattern: "arch/avr/.*" }
             ];
 
-            // Find the matching Arch Labels
+            // Search the filenames for matching Arch Labels
             var prLabels = [];
             for (const archLabel of archLabels) {
               if (prLabels.includes(archLabel.label)) {
