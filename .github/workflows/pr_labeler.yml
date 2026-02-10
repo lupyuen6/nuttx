@@ -67,7 +67,7 @@ jobs:
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const fs = require('fs');
-            const issue_number = Number(fs.readFileSync('./NR'));
+            const issue_number = Number(fs.readFileSync('./pr-id.txt'));
 
             // TODO: Read the PR Labels from the PR Artifact
             const labels = ['Size: Unknown'];

@@ -23,9 +23,28 @@ on:
 
 jobs:
   labeler:
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
     runs-on: ubuntu-latest
     steps:
-      # TODO: Fetch the updated PR lines via GitHub API. We don't need the entire repo.
+      # Fetch the updated PR lines
+      - name: Fetch PR updates
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pull_number = context.issue.number;
+            const listFilesOptions = github.rest.pulls.listFiles.endpoint.merge({
+              owner,
+              repo,
+              pull_number
+            });
+            const listFilesResponse = await github.paginate(listFilesOptions);
+            console.log({ listFilesResponse });
 
       # TODO: Compute the Size Label and Arch Labels
 
@@ -33,7 +52,7 @@ jobs:
       - name: Save PR number and labels
         run: |
           mkdir -p ./pr
-          echo ${{ github.event.number }} > ./pr/NR
+          echo ${{ github.event.number }} > ./pr/pr-id.txt
       - uses: actions/upload-artifact@v6
         with:
           name: pr
