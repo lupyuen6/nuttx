@@ -40,12 +40,8 @@ jobs:
             const pull_number = context.issue.number;
 
             // Fetch the array of updated PR files:
-            // { filename: 'arch/sparc/test.txt', status: 'added', additions: 3, deletions: 0, changes: 3 }
-            const listFilesOptions = github.rest.pulls.listFiles.endpoint.merge({
-              owner,
-              repo,
-              pull_number
-            });
+            // { filename: 'arch/arm/test.txt', status: 'added', additions: 3, deletions: 0, changes: 3 }
+            const listFilesOptions = github.rest.pulls.listFiles.endpoint.merge({ owner, repo, pull_number });
             const listFilesResponse = await github.paginate(listFilesOptions);
 
             // TODO: Compute the Size Label
@@ -55,6 +51,7 @@ jobs:
             // <=500 Lines Modified: 'Size: M'
             // <=1000 Lines Modified: 'Size: L'
             // >1000 Lines Modified: 'Size: XL'
+            var prLabels = [ 'Size: Unknown' ];
 
             // TODO: Parse the Arch Label Patterns in .github/labeler.yml
             const archLabels = [
@@ -64,7 +61,6 @@ jobs:
             ];
 
             // Search the filenames for matching Arch Labels
-            var prLabels = [];
             for (const archLabel of archLabels) {
               if (prLabels.includes(archLabel.label)) {
                 break;
