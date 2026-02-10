@@ -49,7 +49,14 @@ jobs:
             const listFilesResponse = await github.paginate(listFilesOptions);
             console.log({ listFilesResponse });
 
-      # TODO: Compute the Size Label and Arch Labels
+            # TODO: Compute the Size Label
+            
+            # Compute the Arch Labels
+            const label = "Arch: sparc";
+            const pattern = "arch/sparc/.*";
+            const re = new RegExp(pattern);
+            re.test("arch/sparc/aaa.txt");  // Returns true
+            re.test("arch/spar/aaa.txt");   // Returns false
 
       # TODO: Save the PR Number and PR Labels into a PR Artifact
       - name: Save PR number and labels
