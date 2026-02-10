@@ -75,6 +75,7 @@ jobs:
             const labels = fs.readFileSync('pr-labels.txt')
               .split('\n')
               .filter(s => (s != ''));
+            console.log({ issue_number, labels });
 
             // Write the PR Labels into the PR
             await github.rest.issues.setLabels({
