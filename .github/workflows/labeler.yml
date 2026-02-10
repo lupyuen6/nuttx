@@ -49,6 +49,12 @@ jobs:
             const listFilesResponse = await github.paginate(listFilesOptions);
 
             // TODO: Compute the Size Label
+            // ignore_file_deletions: true
+            // <=10 Lines Modified: 'Size: XS'
+            // <=100 Lines Modified: 'Size: S'
+            // <=500 Lines Modified: 'Size: M'
+            // <=1000 Lines Modified: 'Size: L'
+            // >1000 Lines Modified: 'Size: XL'
 
             // TODO: Parse the Arch Label Patterns in .github/labeler.yml
             const label = "Arch: sparc";
