@@ -40,7 +40,7 @@ jobs:
             const pull_number = context.issue.number;
 
             // Fetch the array of updated PR files:
-            // { filename: 'arch/sparc/test.txt', status: 'added', additions: 1, deletions: 0, changes: 1 }
+            // { filename: 'arch/sparc/test.txt', status: 'added', additions: 3, deletions: 0, changes: 3 }
             const listFilesOptions = github.rest.pulls.listFiles.endpoint.merge({
               owner,
               repo,
@@ -89,7 +89,7 @@ jobs:
             const fs = require('fs');
             fs.mkdirSync(dir);
             fs.writeFileSync(dir + '/pr-id.txt', pull_number + '\n');
-            fs.writeFileSync(dir + '/pr-labels.txt', prLabels.join('\n'));
+            fs.writeFileSync(dir + '/pr-labels.txt', prLabels.join('\n') + '\n');
 
       # Upload the PR Artifact as pr.zip
       - name: Upload PR artifact
