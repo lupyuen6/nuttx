@@ -84,8 +84,8 @@ jobs:
             }
             console.log({ prLabels });
 
-            # Save the PR Number and PR Labels into a PR Artifact
-            const dir = '${{github.workspace}}/pr';
+            // Save the PR Number and PR Labels into a PR Artifact
+            const dir = 'pr';
             const fs = require('fs');
             fs.mkdirSync(dir);
             fs.writeFileSync(dir + '/pr-id.txt', pull_number + '\n');
