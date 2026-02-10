@@ -35,42 +35,46 @@ jobs:
       github.event.workflow_run.conclusion == 'success'
     steps:
       # Download the PR Artifact, containing PR Number and PR Labels
-      - name: 'Download artifact'
+      - name: Download PR artifact
         uses: actions/github-script@v8
         with:
           script: |
-            var artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
                owner: context.repo.owner,
                repo: context.repo.repo,
                run_id: ${{github.event.workflow_run.id }},
             });
-            var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
+            const matchArtifact = artifacts.data.artifacts.filter((artifact) => {
               return artifact.name == "pr"
             })[0];
-            var download = await github.rest.actions.downloadArtifact({
+            const download = await github.rest.actions.downloadArtifact({
                owner: context.repo.owner,
                repo: context.repo.repo,
                artifact_id: matchArtifact.id,
                archive_format: 'zip',
             });
-            var fs = require('fs');
+            const fs = require('fs');
             fs.writeFileSync('${{github.workspace}}/pr.zip', Buffer.from(download.data));
-      - run: unzip pr.zip
+      
+      # Unzip the PR Artifact
+      - name: Unzip PR artifact
+        run: unzip pr.zip
 
       # Write the PR Labels into the PR
-      - name: 'Comment on PR'
+      - name: Write PR labels
         uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            // Read the PR Number from the PR Artifact
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const fs = require('fs');
-            const issue_number = Number(fs.readFileSync('./pr-id.txt'));
 
-            // TODO: Read the PR Labels from the PR Artifact
-            const labels = ['Size: Unknown'];
+            // Read the PR Number and PR Labels from the PR Artifact
+            const issue_number = Number(fs.readFileSync('pr-id.txt'));
+            const labels = fs.readFileSync('pr-labels.txt')
+              .split('\n')
+              .filter(s => (s != ''));
 
             // Write the PR Labels into the PR
             await github.rest.issues.setLabels({
@@ -78,12 +82,4 @@ jobs:
               repo,
               issue_number,
               labels
-            });
-
-            // TODO: Remove this PR Comment
-            await github.rest.issues.createComment({
-              owner,
-              repo,
-              issue_number,
-              body: 'Everything is OK. Thank you for the PR!'
             });
