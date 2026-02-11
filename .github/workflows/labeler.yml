@@ -30,6 +30,18 @@ jobs:
       issues: read
     runs-on: ubuntu-latest
     steps:
+      # Checkout one file from our trusted source: .github/labeler.yml
+      # Never checkout and execute any untrusted code from the PR.
+      - name: Checkout labeler config
+        uses: actions/checkout@v6
+        with:
+          repository: apache/nuttx
+          ref: master
+          path: labeler
+          fetch-depth: 1
+          sparse-checkout: .github/labeler.yml
+          sparse-checkout-cone-mode: false
+
       # Fetch the updated PR files. Compute the Size Label and Arch Labels.
       - name: Compute PR labels
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # v8.0.0
@@ -55,6 +67,9 @@ jobs:
             var prLabels = [ 'Size: Unknown' ];
 
             // TODO: Parse the Arch Label Patterns in .github/labeler.yml
+            const fs = require('fs');
+            const config = fs.readFileSync('labeler/.github/labeler.yml', 'utf8');
+            console.log({ config });
             const archLabels = [
               { label: "Arch: arm", pattern: "arch/arm/.*" },
               { label: "Arch: arm64", pattern: "arch/arm64/.*" },
@@ -84,7 +99,6 @@ jobs:
             // Save the PR Number and PR Labels into a PR Artifact
             // e.g. 'Size: Unknown\nArch: avr\n'
             const dir = 'pr';
-            const fs = require('fs');
             fs.mkdirSync(dir);
             fs.writeFileSync(dir + '/pr-id.txt', pull_number + '\n');
             fs.writeFileSync(dir + '/pr-labels.txt', prLabels.join('\n') + '\n');
