@@ -13,9 +13,11 @@
 # limitations under the License.
 #
 # This workflow will fetch the PR Labels from the PR Artifact, and write
-# the PR Labels into the PR. This workflow is called after the
-# "pull_request" trigger (labeler.yml). Don't use "pull_request_target",
-# it's unsafe.
+# the PR Labels into the PR. The workflow is called after the
+# "pull_request" trigger (labeler.yml). This "workflow_run" trigger uses a
+# GitHub Token with Write Permission, so we must never run any untrusted
+# code from the PR, and we must always extract and use the PR Artifact
+# safely. See https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=321719166#GitHubActionsSecurity-Buildstriggeredwithworkflow_run
 name: "Set Pull Request Labels"
 on:
   workflow_run:
@@ -42,7 +44,7 @@ jobs:
             const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              run_id: ${{github.event.workflow_run.id }},
+              run_id: ${{ github.event.workflow_run.id }},
             });
             const matchArtifact = artifacts.data.artifacts.filter((artifact) => {
               return artifact.name == "pr"

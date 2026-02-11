@@ -17,6 +17,7 @@
 # PR Labels will be written to the PR in the "workflow_run" trigger
 # (pr_labeler.yml), because this "pull_request" trigger has read-only
 # permission. Don't use "pull_request_target", it's unsafe.
+# See https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=321719166#GitHubActionsSecurity-Buildstriggeredwithpull_request_target
 name: "Pull Request Labeler"
 on:
   - pull_request
