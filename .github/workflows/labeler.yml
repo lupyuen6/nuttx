@@ -66,10 +66,19 @@ jobs:
             // >1000 Lines Modified: 'Size: XL'
             var prLabels = [ 'Size: Unknown' ];
 
-            // TODO: Parse the Arch Label Patterns in .github/labeler.yml
+            // Parse the Arch Label Patterns in .github/labeler.yml. Condense into:
+            // "Area: Audio":
+            // - any-glob-to-any-file: 'audio/**'
+            // - any-glob-to-any-file: ...
             const fs = require('fs');
-            const config = fs.readFileSync('labeler/.github/labeler.yml', 'utf8');
+            const config = fs.readFileSync('labeler/.github/labeler.yml', 'utf8')
+              .map(s => s.trim())      // Remove leading and trailing spaces
+              .filter(s => (s != ''))  // Remove empty lines
+              .filter(s => !s.startsWith('#'))                  // Remove comments
+              .filter(s => !s.startsWith('- changed-files:'));  // Remove "changed-files"
             console.log({ config });
+
+            // TODO: Remove this
             const archLabels = [
               { label: "Arch: arm", pattern: "arch/arm/.*" },
               { label: "Arch: arm64", pattern: "arch/arm64/.*" },
