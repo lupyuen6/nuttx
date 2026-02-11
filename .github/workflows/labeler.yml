@@ -67,8 +67,8 @@ jobs:
             var prLabels = [ 'Size: Unknown' ];
 
             // Parse the Arch Label Patterns in .github/labeler.yml. Condense into:
-            // "Area: Audio":
-            // - any-glob-to-any-file: 'audio/**'
+            // "Arch: arm":
+            // - any-glob-to-any-file: 'arch/arm/**'
             // - any-glob-to-any-file: ...
             const fs = require('fs');
             const config = fs.readFileSync('labeler/.github/labeler.yml', 'utf8')
@@ -78,6 +78,11 @@ jobs:
               .filter(s => !s.startsWith('#'))                  // Remove comments
               .filter(s => !s.startsWith('- changed-files:'));  // Remove "changed-files"
             console.log({ config });
+
+            // Convert Glob Pattern to Regex Pattern:
+            // . becomes \.
+            // * becomes [^/]*
+            // ** becomes .*
 
             // TODO: Remove this
             const archLabels = [
