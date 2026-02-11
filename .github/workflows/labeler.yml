@@ -87,6 +87,7 @@ jobs:
             var archLabels = [];
             var label = "";
             for (const c of config) {
+              // Get the Arch Label
               if (c.startsWith('"')) {    // "Arch: arm":
                 label = c.split('"')[1];  // Arch: arm
 
@@ -96,6 +97,11 @@ jobs:
                   .split('.').join('\\.')            // .  becomes \.
                   .split('*').join('[^/]*')          // *  becomes [^/]*
                   .split('[^/]*[^/]*').join('.*');   // ** becomes .*
+                archLabels.push({ label, pattern });
+
+              } else {
+                // We don't support all rules of `actions/labeler`
+                throw new Error('.github/labeler.yml should contain only changed-files and any-glob-to-any-file, not: ' + c);
               }
             }
             console.log({ archLabels });
