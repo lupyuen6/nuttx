@@ -86,7 +86,7 @@ jobs:
             // { label: "Arch: arm64", pattern: "arch/arm64/.*" }, ...
             var archLabels = [];
             var label = "";
-            for (const c in of config) {
+            for (const c of config) {
               if (c.startsWith('"')) {    // "Arch: arm":
                 label = c.split('"')[1];  // Arch: arm
 
