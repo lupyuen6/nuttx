@@ -78,7 +78,6 @@ jobs:
               .filter(s => (s != ''))  // Remove empty lines
               .filter(s => !s.startsWith('#'))                  // Remove comments
               .filter(s => !s.startsWith('- changed-files:'));  // Remove "changed-files"
-            console.log({ config });
 
             // Convert the Arch Label Patterns from config to archLabels.
             // archLabels will contain the mappings for Arch Label and Filename Pattern
@@ -111,13 +110,9 @@ jobs:
               if (prLabels.includes(archLabel.label)) {
                 break;
               }
-
-              console.log({ archLabel });
               for (const file of listFilesResponse) {
-                console.log({ file });
                 const re = new RegExp(archLabel.pattern);
                 const match = re.test(file.filename);
-                console.log({ match });
                 if (match && !prLabels.includes(archLabel.label)) {
                   prLabels.push(archLabel.label);
                   break;
