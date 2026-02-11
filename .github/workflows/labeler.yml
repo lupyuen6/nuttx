@@ -134,7 +134,7 @@ jobs:
             console.log({ prLabels });
 
             // Save the PR Number and PR Labels into a PR Artifact
-            // e.g. 'Size: Unknown\nArch: avr\n'
+            // e.g. 'Size: XS\nArch: avr\n'
             const dir = 'pr';
             fs.mkdirSync(dir);
             fs.writeFileSync(dir + '/pr-id.txt', pull_number + '\n');
