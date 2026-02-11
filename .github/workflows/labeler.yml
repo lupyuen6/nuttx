@@ -57,6 +57,7 @@ jobs:
             // { filename: 'arch/arm/test.txt', status: 'added', additions: 3, deletions: 0, changes: 3 }
             const listFilesOptions = github.rest.pulls.listFiles.endpoint.merge({ owner, repo, pull_number });
             const listFilesResponse = await github.paginate(listFilesOptions);
+            console.log({ listFilesResponse });
 
             // TODO: Compute the Size Label
             // ignore_file_deletions: true
