@@ -79,17 +79,25 @@ jobs:
               .filter(s => !s.startsWith('- changed-files:'));  // Remove "changed-files"
             console.log({ config });
 
-            // Convert Glob Pattern to Regex Pattern:
-            // . becomes \.
-            // * becomes [^/]*
-            // ** becomes .*
+            // Convert the Arch Label Patterns from config to archLabels.
+            // archLabels will contain the mappings for Arch Label and Filename Pattern
+            // { label: "Arch: arm",   pattern: "arch/arm/.*"   },
+            // { label: "Arch: arm64", pattern: "arch/arm64/.*" }, ...
+            var archLabels = [];
+            var label = "";
+            for (const c in of config) {
+              if (c.startsWith('"')) {    // "Arch: arm":
+                label = c.split('"')[1];  // Arch: arm
 
-            // TODO: Remove this
-            const archLabels = [
-              { label: "Arch: arm", pattern: "arch/arm/.*" },
-              { label: "Arch: arm64", pattern: "arch/arm64/.*" },
-              { label: "Arch: avr", pattern: "arch/avr/.*" }
-            ];
+              } else if (c.startsWith('- any-glob-to-any-file:')) {  // - any-glob-to-any-file: 'arch/arm/**'
+                // Convert Glob Pattern to Regex Pattern:
+                const pattern = c.split("'")[1]      // arch/arm/**
+                  .split('.').join('\\.')            // .  becomes \.
+                  .split('*').join('[^/]*')          // *  becomes [^/]*
+                  .split('[^/]*[^/]*').join('.*');   // ** becomes .*
+              }
+            }
+            console.log({ archLabels });
 
             // Search the filenames for matching Arch Labels
             for (const archLabel of archLabels) {
