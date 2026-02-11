@@ -81,6 +81,7 @@ jobs:
             console.log({ prLabels });
 
             // Save the PR Number and PR Labels into a PR Artifact
+            // e.g. 'Size: Unknown\nArch: avr\n'
             const dir = 'pr';
             const fs = require('fs');
             fs.mkdirSync(dir);

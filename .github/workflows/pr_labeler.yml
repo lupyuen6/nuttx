@@ -71,6 +71,7 @@ jobs:
             const fs = require('fs');
 
             // Read the PR Number and PR Labels from the PR Artifact
+            // e.g. 'Size: Unknown\nArch: avr\n'
             const issue_number = Number(fs.readFileSync('pr-id.txt'));
             const labels = fs.readFileSync('pr-labels.txt', 'utf8')
               .split('\n')
@@ -78,6 +79,7 @@ jobs:
             console.log({ issue_number, labels });
 
             // Write the PR Labels into the PR
+            // e.g. [ 'Size: Unknown', 'Arch: avr' ]
             await github.rest.issues.setLabels({
               owner,
               repo,
