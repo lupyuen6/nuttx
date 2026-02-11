@@ -39,6 +39,7 @@ jobs:
           ref: master
           path: labeler
           fetch-depth: 1
+          persist-credentials: false
           sparse-checkout: .github/labeler.yml
           sparse-checkout-cone-mode: false
 
