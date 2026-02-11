@@ -76,8 +76,7 @@ jobs:
               : (linesChanged <=  100) ? 'Size: S'
               : (linesChanged <=  500) ? 'Size: M'
               : (linesChanged <= 1000) ? 'Size: L'
-              : (linesChanged >  1000) ? 'Size: XL'
-              : 'Size: Unknown';
+              : 'Size: XL';
             var prLabels = [ sizeLabel ];
 
             // Parse the Arch Label Patterns in .github/labeler.yml. Condense into:
