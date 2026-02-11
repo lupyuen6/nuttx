@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# This workflow will fetch the updated PR lines, compute the Size Label
+# This workflow will fetch the updated PR filenames, compute the Size Label
 # and Arch Labels, then save the PR Labels into a PR Artifact. The
 # PR Labels will be written to the PR in the "workflow_run" trigger
 # (pr_labeler.yml), because this "pull_request" trigger has read-only
