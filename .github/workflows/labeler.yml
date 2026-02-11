@@ -72,6 +72,7 @@ jobs:
             // - any-glob-to-any-file: ...
             const fs = require('fs');
             const config = fs.readFileSync('labeler/.github/labeler.yml', 'utf8')
+              .split('\n')             // Split by newline
               .map(s => s.trim())      // Remove leading and trailing spaces
               .filter(s => (s != ''))  // Remove empty lines
               .filter(s => !s.startsWith('#'))                  // Remove comments

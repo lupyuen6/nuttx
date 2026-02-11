@@ -76,7 +76,7 @@ jobs:
             // e.g. 'Size: Unknown\nArch: avr\n'
             const issue_number = Number(fs.readFileSync('pr-id.txt'));
             const labels = fs.readFileSync('pr-labels.txt', 'utf8')
-              .split('\n')              // Delimited by newline
+              .split('\n')              // Split by newline
               .filter(s => (s != ''));  // Remove empty lines
             console.log({ issue_number, labels });
 
