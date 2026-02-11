@@ -54,19 +54,31 @@ jobs:
             const pull_number = context.issue.number;
 
             // Fetch the array of updated PR filenames:
-            // { filename: 'arch/arm/test.txt', status: 'added', additions: 3, deletions: 0, changes: 3 }
+            // { status: 'added',    filename: 'arch/arm/test.txt', additions: 3, deletions: 0, changes: 3 }
+            // { status: 'removed',  filename: 'Documentation/legacy_README.md', additions: 0, deletions: 2531, changes: 2531 }
+            // { status: 'modified', filename: 'Documentation/security.rst', additions: 1, deletions: 0, changes: 1 }
             const listFilesOptions = github.rest.pulls.listFiles.endpoint.merge({ owner, repo, pull_number });
             const listFilesResponse = await github.paginate(listFilesOptions);
             console.log({ listFilesResponse });
 
-            // TODO: Compute the Size Label
-            // ignore_file_deletions: true
-            // <=10 Lines Modified: 'Size: XS'
-            // <=100 Lines Modified: 'Size: S'
-            // <=500 Lines Modified: 'Size: M'
-            // <=1000 Lines Modified: 'Size: L'
-            // >1000 Lines Modified: 'Size: XL'
-            var prLabels = [ 'Size: Unknown' ];
+            // Sum up the number of lines changed
+            const sizeFiles = listFilesResponse
+              .filter(f => (f.status != 'removed'));  // Ignore deleted files
+            var linesChanged = 0;
+            for (const file of sizeFiles) {
+              linesChanged += file.changes;
+            }
+            console.log({ linesChanged });
+
+            // Compute the Size Label
+            const sizeLabel =
+              (linesChanged   <=   10) ? 'Size: XS'
+              : (linesChanged <=  100) ? 'Size: S'
+              : (linesChanged <=  500) ? 'Size: M'
+              : (linesChanged <= 1000) ? 'Size: L'
+              : (linesChanged >  1000) ? 'Size: XL'
+              : 'Size: Unknown';
+            var prLabels = [ sizeLabel ];
 
             // Parse the Arch Label Patterns in .github/labeler.yml. Condense into:
             // "Arch: arm":
