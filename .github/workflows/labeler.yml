@@ -43,7 +43,7 @@ jobs:
           sparse-checkout: .github/labeler.yml
           sparse-checkout-cone-mode: false
 
-      # Fetch the updated PR files. Compute the Size Label and Arch Labels.
+      # Fetch the updated PR filenames. Compute the Size Label and Arch Labels.
       - name: Compute PR labels
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # v8.0.0
         with:
@@ -53,7 +53,7 @@ jobs:
             const repo = context.repo.repo;
             const pull_number = context.issue.number;
 
-            // Fetch the array of updated PR files:
+            // Fetch the array of updated PR filenames:
             // { filename: 'arch/arm/test.txt', status: 'added', additions: 3, deletions: 0, changes: 3 }
             const listFilesOptions = github.rest.pulls.listFiles.endpoint.merge({ owner, repo, pull_number });
             const listFilesResponse = await github.paginate(listFilesOptions);
