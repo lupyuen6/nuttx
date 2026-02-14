@@ -1,8 +1,8 @@
-# APACHE NUTTX
-
-* Introduction
-* Community
-  - Getting Help
+1 # APACHE NUTTX
+2
+3 * Introduction
+4 * Community
+5  - Getting Help
   - Mailing Lists
   - Issue Tracker
   - Source Code
